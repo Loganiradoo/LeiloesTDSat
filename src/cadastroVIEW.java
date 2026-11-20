@@ -140,17 +140,44 @@ public class cadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_cadastroNomeActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        ProdutosDTO produto = new ProdutosDTO();
-        String nome = cadastroNome.getText();
-        String valor = cadastroValor.getText();
-        String status = "A Venda";
-        produto.setNome(nome);
-        produto.setValor(Integer.parseInt(valor));
-        produto.setStatus(status);
-        
-        ProdutosDAO produtodao = new ProdutosDAO();
-        produtodao.cadastrarProduto(produto);
-        
+String nome = cadastroNome.getText().trim();
+String valor = cadastroValor.getText().trim();
+
+if (nome.isEmpty() || valor.isEmpty()) {
+    javax.swing.JOptionPane.showMessageDialog(
+        this, "Preencha todos os campos!"
+    );
+    return;
+}
+
+try {
+    ProdutosDTO produto = new ProdutosDTO();
+
+    produto.setNome(nome);
+    produto.setValor(Integer.parseInt(valor));
+    produto.setStatus("A Venda");
+
+    ProdutosDAO produtodao = new ProdutosDAO();
+
+    if (produtodao.cadastrarProduto(produto)) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this, "Produto cadastrado com sucesso!"
+        );
+
+        cadastroNome.setText("");
+        cadastroValor.setText("");
+
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(
+            this, "Não foi possível cadastrar o produto."
+        );
+    }
+
+} catch (NumberFormatException erro) {
+    javax.swing.JOptionPane.showMessageDialog(
+        this, "Digite um valor numérico válido!"
+    );
+}
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
