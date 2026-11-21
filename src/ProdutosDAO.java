@@ -49,6 +49,32 @@ public boolean cadastrarProduto(ProdutosDTO produto) {
         return false;
     }
 }
+
+public boolean venderProduto(int id) {
+
+    String sql = "UPDATE produtos SET status = ? WHERE id = ?";
+
+    try (Connection conn = new conectaDAO().connectDB()) {
+
+        if (conn == null) {
+            return false;
+        }
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, "Vendido");
+            stmt.setInt(2, id);
+
+            int linhasAfetadas = stmt.executeUpdate();
+
+            return linhasAfetadas > 0;
+        }
+
+    } catch (SQLException erro) {
+        erro.printStackTrace();
+        return false;
+    }
+}
     
 public ArrayList<ProdutosDTO> listarProdutos() {
 
